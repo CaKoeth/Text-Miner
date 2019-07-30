@@ -1,0 +1,64 @@
+#load library
+
+install.packages("twitteR")
+install.packages("ROAuth")
+library("NLP", lib.loc="~/R/win-library/3.3")
+library("twitteR", lib.loc="~/R/win-library/3.3")
+library("syuzhet", lib.loc="~/R/win-library/3.3")
+library("tm", lib.loc="~/R/win-library/3.3")
+library("SnowballC", lib.loc="~/R/win-library/3.3")
+library("stringi", lib.loc="~/R/win-library/3.3")
+library("topicmodels")
+library("syuzhet", lib.loc="~/R/win-library/3.3")library("twitteR")
+library("ROAuth")
+#load credentials
+consumer_key<- "Mhq5MukKHVrTHB0wJ5YYKISHp"
+consumer_secret<- "rXlReSR7KauPgeBXIyCWP8NTfgR1WnKVIf4vvC577M8maxr79z"
+access_token<- "1057061353-8JfWbOKfJtuQRyuEUdOS3W2FfQQUsCHymxsx6Sv"
+access_secret<- "9OvoiqRQZ6vLdchvw51u0DrLUU6YJUttdurDvryaeKzfd"
+
+#set up Twitter authentication
+setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_secret)
+
+#fetch tweets associated with that hashtag, 12 tweets-n in 
+# (en)-glish-lang since the indicated date yy/mm/dd
+
+tweets_bm<- searchTwitter("BeyondMeat", n= 10000,lang = "en")
+
+#strip retweets
+strip_retweets(tweets_bm)
+
+#convert to data frame using the twListtoDF fn
+tweets_beyond_meat<- twListToDF(tweets_bm)
+
+#convert tweets to text
+beyondMeat_text<- tweets_beyond_meat$text
+
+#convert all text to lower case
+beyondMeat_text<- tolower(beyondMeat_text)
+
+#Replace blank space ('rt')
+beyondMeat_text<- gsub("rt","",beyondMeat_text)
+
+#Replace @Username
+beyondMeat_text<- gsub("@\\w+", "", beyondMeat_text)
+
+#Remove punctuation
+beyondMeat_text<-gsub("[[:punct:]]", "", beyondMeat_text)
+
+#Remove link
+beyondMeat_text<- gsub("http\\w+", "", beyondMeat_text)
+
+#Remove tabs
+beyondMeat_text<- gsub("[ |\t]{2,}", "", beyondMeat_text)
+
+# Remove blank spaces at the beginning
+beyondMeat_text<- gsub("^ ", "", beyondMeat_text)
+
+# Remove blank spaces at the end
+beyondMeat_text<- gsub(" $", "", beyondMeat_text)
+
+library(tm)
+
+#create corpus
+beyond_meat.text.corpus<- Corpus(VectorSource(beyondMeat_text))

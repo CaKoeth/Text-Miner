@@ -12,10 +12,10 @@ library("topicmodels")
 library("syuzhet", lib.loc="~/R/win-library/3.3")library("twitteR")
 library("ROAuth")
 #load credentials
-consumer_key<- "Mhq5MukKHVrTHB0wJ5YYKISHp"
-consumer_secret<- "rXlReSR7KauPgeBXIyCWP8NTfgR1WnKVIf4vvC577M8maxr79z"
-access_token<- "1057061353-8JfWbOKfJtuQRyuEUdOS3W2FfQQUsCHymxsx6Sv"
-access_secret<- "9OvoiqRQZ6vLdchvw51u0DrLUU6YJUttdurDvryaeKzfd"
+consumer_key<- 
+consumer_secret<- 
+access_token<- 
+access_secret<- 
 
 #set up Twitter authentication
 setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_secret)
